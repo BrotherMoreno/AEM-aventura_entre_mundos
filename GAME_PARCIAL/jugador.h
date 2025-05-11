@@ -17,7 +17,7 @@ class Jugador {
 public:
     Jugador(int x, int y);
     void gotoxy(int x, int y);
-    void mover(char tecla, int jugador);
+    void mover(int tecla, int jugador);
     void dibujar(int elegirDibujoJugador);
     void borrar(int jugador);
     void mostrarVida();
@@ -31,7 +31,7 @@ private:
 	int posX, posY;
 	bool viva;
 	int vida;
-
+    int velocidad;
 
 };
 #endif 

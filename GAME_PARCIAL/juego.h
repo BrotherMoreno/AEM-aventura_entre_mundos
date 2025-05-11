@@ -16,10 +16,10 @@ using namespace System;
 
 class Juego {
 public:
-    Juego() : Jugador(MAX_WIDTH / 2, MAX_HEIGHT - 5) {
-        Enemigos.push_back(new Araña(2, 0, 5));
-        Enemigos.push_back(new Araña(3, 0, 6));
-        Enemigos.push_back(new Araña(4, 0, 7));
+    Juego() : Jugador(MAX_WIDTH / 2, MAX_HEIGHT - 20) {
+        //Enemigos.push_back(new Araña(10, 0, 10));
+        Enemigos.push_back(new Fantasma(2, MAX_WIDTH - 13, 10));
+        Enemigos.push_back(new Araña(2, 0, 7));
     }
     void gotoxy(int x, int y) {
         Console::SetCursorPosition(x, y);
@@ -36,13 +36,13 @@ public:
         Mapas.dibujarMapa2();
 
         while (Jugador.estaViva()) {
-            Console::BackgroundColor = ConsoleColor::DarkGreen;
-            Jugador.dibujar(1);
+            Console::BackgroundColor = ConsoleColor::Black;
+            Jugador.dibujar(2);
             Jugador.mostrarVida();
 
             if (_kbhit()) {
-                char tecla = _getch();
-                Jugador.mover(tecla,1);
+                int tecla = _getch();
+                Jugador.mover(tecla,2);
             }
 
             for (auto* v : Enemigos) {
@@ -70,12 +70,14 @@ public:
         ajustarConsola();
         Mapas.dibujarMapa1();
         while (Jugador.estaViva()) {
-            Jugador.dibujar(2);
+            Console::BackgroundColor = ConsoleColor::Black;
+
+            Jugador.dibujar(1);
             Jugador.mostrarVida();
 
             if (_kbhit()) {
-                char tecla = _getch();
-                Jugador.mover(tecla,2);
+                int tecla = _getch();
+                Jugador.mover(tecla,1);
             }
 
             for (auto* v : Enemigos) {
@@ -91,7 +93,7 @@ public:
                 }
             }
 
-            Sleep(100);
+            Sleep(50);
         }
 
         system("cls"); // Limpia pantalla al morir
@@ -107,7 +109,7 @@ public:
 private:
 	std::vector<Enemigos*> Enemigos;
 	Jugador Jugador;
-    Mapas Mapas;
+    Mapas Mapas;    
     
 	//       
 	void intro();
