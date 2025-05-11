@@ -6,52 +6,95 @@ Jugador::Jugador(int x, int y) : posX(x), posY(y), viva(true), vida(10) {}
 void Jugador::gotoxy(int x, int y) {
     Console::SetCursorPosition(x, y);
 }
-void Jugador::mover(char tecla) {
-    borrar();
-    if (tecla == 'w' && posY > 0) posY--;
-    else if (tecla == 's' && posY < MAX_HEIGHT - 4) posY++; // Altura de 8
-    else if (tecla == 'a' && posX > 0) posX--;
-    else if (tecla == 'd' && posX < MAX_WIDTH - 5) posX++; // Ancho de 12
-    dibujar();
+void Jugador::mover(char tecla, int jugador) {
+    if (jugador == 1) {
+
+        borrar(1);
+        if (tecla == 'w' && posY > 0) posY--;
+        else if (tecla == 's' && posY < MAX_HEIGHT - 4) posY++; // Altura de 8
+        else if (tecla == 'a' && posX > 0) posX--;
+        else if (tecla == 'd' && posX < MAX_WIDTH - 5) posX++; // Ancho de 12
+        dibujar(1);
+    }
+    if (jugador == 2) {
+        borrar(2);
+        if (tecla == 'w' && posY > 0) posY--;
+        else if (tecla == 's' && posY < MAX_HEIGHT - 2) posY++; // Altura de 8
+        else if (tecla == 'a' && posX > 0) posX--;
+        else if (tecla == 'd' && posX < MAX_WIDTH - 3) posX++; // Ancho de 12
+        dibujar(2);
+    }
 }
 
-void Jugador::dibujar() {
+void Jugador::dibujar(int elegirDibujoJugador) {
     if (!viva) return;
 
     char block = (char)219;
+    if (elegirDibujoJugador == 1) {
 
-    int forma[4][4] = { {2,1,1,2},
-                                    {1,0,0,1},
-                                    {2,1,1,2},
-                                    {1,2,2,1}
-    };
+        int forma[4][4] = { {2,1,1,2},
+                                        {1,0,0,1},
+                                        {2,1,1,2},
+                                        {1,2,2,1}
+        };
 
 
-    for (int i = 0; i < 4; ++i) {
-        gotoxy(posX, posY + i);
-        for (int j = 0; j < 4; ++j) {
-            if (forma[i][j] == 0) {
-                Console::ForegroundColor = ConsoleColor::White;
-                std::cout << block;
-            }
-            if (forma[i][j] == 1) {
-                Console::ForegroundColor = ConsoleColor::DarkRed;
-                std::cout << block;
-            }
-            if (forma[i][j] == 2) {
-                Console::ForegroundColor = ConsoleColor::DarkGreen;
-                std::cout << block;
+        for (int i = 0; i < 4; ++i) {
+            gotoxy(posX, posY + i);
+            for (int j = 0; j < 4; ++j) {
+                if (forma[i][j] == 0) {
+                    Console::ForegroundColor = ConsoleColor::White;
+                    std::cout << block;
+                }
+                if (forma[i][j] == 1) {
+                    Console::ForegroundColor = ConsoleColor::DarkRed;
+                    std::cout << block;
+                }
+                if (forma[i][j] == 2) {
+                    Console::ForegroundColor = ConsoleColor::DarkGreen;
+                    std::cout << block;
+                }
             }
         }
     }
+    if (elegirDibujoJugador == 2) {
 
+        int forma[2][2] = { {0,0},
+                                        {1,1,},
+        };
+
+
+        for (int i = 0; i < 2; ++i) {
+            gotoxy(posX, posY + i);
+            for (int j = 0; j < 2; ++j) {
+                if (forma[i][j] == 0) {
+                    Console::ForegroundColor = ConsoleColor::White;
+                    std::cout << block;
+                }
+                if (forma[i][j] == 1) {
+                    Console::ForegroundColor = ConsoleColor::DarkRed;
+                    std::cout << block;
+                }
+            }
+        }
+    }
     mostrarVida();
 }
 
-void Jugador::borrar() {
-    for (int i = 0; i < 4; ++i) {
-        gotoxy(posX, posY + i);
-        std::cout << "    ";  // 11 espacios
+void Jugador::borrar(int jugador) {
+    if (jugador == 1) {
+
+        for (int i = 0; i < 4; ++i) {
+            gotoxy(posX, posY + i);
+            std::cout << "    ";  // 11 espacios
+        }
+    }
+    if (jugador == 2) {
+
+        for (int i = 0; i < 2; ++i) {
+            gotoxy(posX, posY + i);
+            std::cout << "  ";  // 11 espacios
+        }
     }
 
 }

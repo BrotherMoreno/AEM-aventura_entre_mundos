@@ -17,9 +17,9 @@ class Jugador {
 public:
     Jugador(int x, int y);
     void gotoxy(int x, int y);
-    void mover(char tecla);
-    void dibujar();
-    void borrar();
+    void mover(char tecla, int jugador);
+    void dibujar(int elegirDibujoJugador);
+    void borrar(int jugador);
     void mostrarVida();
     int getX();
     int getY();

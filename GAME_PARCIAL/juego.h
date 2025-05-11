@@ -37,12 +37,12 @@ public:
 
         while (Jugador.estaViva()) {
             Console::BackgroundColor = ConsoleColor::DarkGreen;
-            Jugador.dibujar();
+            Jugador.dibujar(1);
             Jugador.mostrarVida();
 
             if (_kbhit()) {
                 char tecla = _getch();
-                Jugador.mover(tecla);
+                Jugador.mover(tecla,1);
             }
 
             for (auto* v : Enemigos) {
@@ -68,14 +68,14 @@ public:
     }
     void jugarNivel() {
         ajustarConsola();
-        Mapas.dibujarMapa2();
+        Mapas.dibujarMapa1();
         while (Jugador.estaViva()) {
-            Jugador.dibujar();
+            Jugador.dibujar(2);
             Jugador.mostrarVida();
 
             if (_kbhit()) {
                 char tecla = _getch();
-                Jugador.mover(tecla);
+                Jugador.mover(tecla,2);
             }
 
             for (auto* v : Enemigos) {
