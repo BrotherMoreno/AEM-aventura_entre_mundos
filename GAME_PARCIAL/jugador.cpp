@@ -6,15 +6,30 @@ Jugador::Jugador(int x, int y) : posX(x), posY(y), viva(true), vida(10),velocida
 void Jugador::gotoxy(int x, int y) {
     Console::SetCursorPosition(x, y);
 }
-void Jugador::mover(int tecla, int jugador) {
-    if (jugador == 1) {
-        borrar(1);
-        if (tecla == 72 && posY > 0) posY -= velocidad; // Mueve hacia arriba más rápido
-        else if (tecla == 80 && posY < MAX_HEIGHT - 4) posY += velocidad; // Mueve hacia abajo más rápido
-        else if (tecla == 75 && posX > 0) posX -= velocidad; // Mueve hacia la izquierda más rápido
-        else if (tecla == 77 && posX < MAX_WIDTH - 5) posX += velocidad; // Mueve hacia la derecha más rápido
-        dibujar(1);
+void Jugador::mover(int tecla, int jugador, int mapa1[30][120]) {
+    if (!viva) return;
+
+    int nuevaPosX = posX;
+    int nuevaPosY = posY;
+
+    // Calcula la nueva posición basada en la tecla presionada
+    if (tecla == 72 && posY > 0) nuevaPosY--; // Arriba
+    else if (tecla == 80 && posY < 29) nuevaPosY++; // Abajo (ajustado para 30 filas)
+    else if (tecla == 75 && posX > 0) nuevaPosX--; // Izquierda
+    else if (tecla == 77 && posX < 119) nuevaPosX++; // Derecha (ajustado para 120 columnas)
+
+    // Verifica si la nueva posición es válida en el mapa
+    if (/*mapa1[nuevaPosY][nuevaPosX] == 3&& mapa1[nuevaPosY][nuevaPosX+1] == 3&& mapa1[nuevaPosY][nuevaPosX+2] == 3&& mapa1[nuevaPosY][nuevaPosX+3] == 3&& mapa1[nuevaPosY][nuevaPosX+4] == 3 &&*/
+        mapa1[nuevaPosY+1][nuevaPosX] == 3 && mapa1[nuevaPosY+1][nuevaPosX + 1] == 3 && mapa1[nuevaPosY+1][nuevaPosX + 2] == 3 && mapa1[nuevaPosY+1][nuevaPosX + 3] == 3 && mapa1[nuevaPosY+1][nuevaPosX + 4] == 3 && 
+        mapa1[nuevaPosY + 2][nuevaPosX] == 3 && mapa1[nuevaPosY + 2][nuevaPosX + 1] == 3 && mapa1[nuevaPosY + 2][nuevaPosX + 2] == 3 && mapa1[nuevaPosY + 2][nuevaPosX + 3] == 3 && mapa1[nuevaPosY + 2][nuevaPosX + 4] == 3 &&
+        mapa1[nuevaPosY + 3][nuevaPosX] == 3 && mapa1[nuevaPosY + 3][nuevaPosX + 1] == 3 && mapa1[nuevaPosY + 3][nuevaPosX + 2] == 3 && mapa1[nuevaPosY + 3][nuevaPosX + 3] == 3 && mapa1[nuevaPosY + 3][nuevaPosX + 4] == 3 && 
+        mapa1[nuevaPosY + 4][nuevaPosX] == 3 && mapa1[nuevaPosY + 4][nuevaPosX + 1] == 3 && mapa1[nuevaPosY + 4][nuevaPosX + 2] == 3 && mapa1[nuevaPosY + 4][nuevaPosX + 3] == 3 && mapa1[nuevaPosY + 4][nuevaPosX + 4] == 3 ) {
+        borrar(jugador); // Borra la posición anterior
+        posX = nuevaPosX;
+        posY = nuevaPosY;
+        dibujar(jugador); // Dibuja en la nueva posición
     }
+
     if (jugador == 2) {
         borrar(2);
         if (tecla == 'w' && posY > 0) posY -= velocidad;

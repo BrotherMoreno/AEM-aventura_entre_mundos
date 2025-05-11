@@ -111,7 +111,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="aliados.h" />
     <ClInclude Include="araña.h" />
     <ClInclude Include="deborador.h" />
     <ClInclude Include="enemigos.h" />

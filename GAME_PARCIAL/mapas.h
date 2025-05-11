@@ -16,7 +16,7 @@ public:
 	void dibujarMapa1();
 	void dibujarMapa2();
 
-	int mapa1[FILA][COLUMNA];
-	int mapa2[FILA][COLUMNA];
+	int mapa1[30][120];
+	int mapa2[30][120];
 };
 #endif // !MAPAS_H

@@ -5,7 +5,7 @@
 #define Derecha 77
 #define Izquierda 75
 #define Letrae 101
-
+#include"mapas.h"
 #include <iostream>
 #include<cctype>
 #include<Windows.h>
@@ -15,9 +15,10 @@
 using  namespace System;
 class Jugador {
 public:
+    
     Jugador(int x, int y);
     void gotoxy(int x, int y);
-    void mover(int tecla, int jugador);
+    void mover(int tecla, int jugador,int mapa1[30][120]);
     void dibujar(int elegirDibujoJugador);
     void borrar(int jugador);
     void mostrarVida();
