@@ -4,17 +4,19 @@
 #include"enemigos.h"
 #include "araña.h"
 #include"fantasma.h"
+#include"mapas.h"
 #include <iostream>
 #include<cctype>
 #include<Windows.h>
 #include<thread>
 #include<chrono>
 #include<conio.h>
+
 using namespace System;
 
 class Juego {
 public:
-	Juego() : Jugador(MAX_WIDTH / 2, MAX_HEIGHT - 5) {
+    Juego() : Jugador(MAX_WIDTH / 2, MAX_HEIGHT - 5) {
         Enemigos.push_back(new Araña(2, 0, 5));
         Enemigos.push_back(new Araña(3, 0, 6));
         Enemigos.push_back(new Araña(4, 0, 7));
@@ -29,10 +31,14 @@ public:
         SMALL_RECT rect = { 0, 0, MAX_WIDTH - 1, MAX_HEIGHT - 1 };
         SetConsoleWindowInfo(hConsole, TRUE, &rect);
     }
-	void jugarNivel1() {
+    void jugarNivel2() {
         ajustarConsola();
+        Mapas.dibujarMapa2();
+
         while (Jugador.estaViva()) {
+            Console::BackgroundColor = ConsoleColor::DarkGreen;
             Jugador.dibujar();
+            Jugador.mostrarVida();
 
             if (_kbhit()) {
                 char tecla = _getch();
@@ -55,19 +61,54 @@ public:
             Sleep(100);
         }
 
-        if (!Jugador.estaViva()) {
-            gotoxy(0, MAX_HEIGHT);
-            std::cout << "\n\n¡Game Over! Has muerto.";
+        system("cls"); // Limpia pantalla al morir
+        gotoxy(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2);
+        std::cout << "¡Game Over! Has muerto.\n";
+        Sleep(3000); // Espera antes de cerrar
+    }
+    void jugarNivel() {
+        ajustarConsola();
+        Mapas.dibujarMapa2();
+        while (Jugador.estaViva()) {
+            Jugador.dibujar();
+            Jugador.mostrarVida();
+
+            if (_kbhit()) {
+                char tecla = _getch();
+                Jugador.mover(tecla);
+            }
+
+            for (auto* v : Enemigos) {
+                v->mover();
+
+                // 🔧 Colisión más precisa usando longitud
+                if (Jugador.getY() == v->getY() &&
+                    Jugador.getX() >= v->getX() &&
+                    Jugador.getX() < v->getX() + v->getLongitud()) {
+                    if (v->chocar()) {
+                        Jugador.perderVida();
+                    }
+                }
+            }
+
+            Sleep(100);
         }
-	}
+
+        system("cls"); // Limpia pantalla al morir
+        gotoxy(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2);
+        std::cout << "¡Game Over! Has muerto.\n";
+        Sleep(3000); // Espera antes de cerrar
+    }
 	~Juego() {
 		for (auto* v : Enemigos)
 			delete v;
 	} 
-	void run();
+	void run(); 
 private:
 	std::vector<Enemigos*> Enemigos;
 	Jugador Jugador;
+    Mapas Mapas;
+    
 	//       
 	void intro();
 	void ocultarCursor();

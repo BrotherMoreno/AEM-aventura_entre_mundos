@@ -2,7 +2,7 @@
 //pasar jugadors de manera de composicion crear objeto y llamar a la funcion en el bucle, llamar  funciones ....
 void Juego::run() {
 	//intro();
-	jugarNivel1();
+	jugarNivel2();
 	menuPrincipal();
 }
 

@@ -11,13 +11,9 @@
 using  namespace System;
 class Mapas {
 public:
-	Mapas();
-	~Mapas();
-	void dibujarMapa1()const;
-	void dibujarMapa2()const;
-	void dibujarMapa3()const;
-private:
-
+	
+	void dibujarMapa1();
+	void dibujarMapa2();
 
 
 };
