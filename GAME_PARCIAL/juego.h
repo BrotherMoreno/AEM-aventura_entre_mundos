@@ -112,9 +112,8 @@ public:
         }
 
         system("cls"); // Limpia pantalla al morir
-        gotoxy(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2);
-        std::cout << "¡FELICIDADES! Has GANADO\n";
-        Sleep(3000); // Espera antes de cerrar
+        ganaste();
+        exit(0);
     }
     void jugarNivel2() {
         int mapa2 [30][120]= {
@@ -196,6 +195,10 @@ public:
             if (_kbhit()) {
                 jugador2.mover();
             }
+            if (jugador2.recolectados == 10) {
+                system("cls");
+                JugarNivel3();
+            }
 
             Sleep(25);
         }
@@ -234,24 +237,81 @@ public:
                         {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7}
 
         };
+
+        // Variables para contar los materiales recolectados
+        int materiaPrimaRecolectada = 0;
+        int arenaRecolectada = 0;
+        const int totalMateriales = 4; // Total de materiales a recolectar
+
+        // Posiciones de los materiales en el mapa
+        std::vector<std::pair<int, int>> materiales = {
+            {117, 11}, {10, 5}, {29, 5}, {70, 21} // Recursos seleccionados
+        };
+
         ocultarCursor();
         ajustarConsola();
         Mapas.dibujarMapa1();
+
+        // Dibujar los materiales en el mapa
+        for (size_t i = 0; i < materiales.size(); ++i) {
+            gotoxy(materiales[i].first, materiales[i].second);
+            if (i < 2) {
+                Console::ForegroundColor = ConsoleColor::Green; // Materia prima
+                std::cout << "M";
+            }
+            else {
+                Console::ForegroundColor = ConsoleColor::Yellow; // Arena
+                std::cout << "A";
+            }
+        }
+
         while (Jugador.estaViva()) {
             Console::BackgroundColor = ConsoleColor::Black;
 
-            Jugador.dibujar(1);
-            Jugador.mostrarVida();
+            // Mostrar los materiales recolectados
+            Console::SetCursorPosition(0, 0);
+            Console::ForegroundColor = ConsoleColor::White;
+            std::cout << "Materia Prima: " << materiaPrimaRecolectada << " / 2";
+            Console::SetCursorPosition(0, 1);
+            std::cout << "Arena: " << arenaRecolectada << " / 2";
+            Console::BackgroundColor = ConsoleColor::Black;
+            Console::ForegroundColor = ConsoleColor::White;
 
-            if (_kbhit()) {
-                int tecla = _getch();
-                Jugador.mover(tecla,1,mapa1);
+
+            // Verificar colisión con materiales
+            for (size_t i = 0; i < materiales.size(); ++i) {
+                if (Jugador.getX() == materiales[i].first && Jugador.getY() == materiales[i].second) {
+                    if (i < 2) {
+                        materiaPrimaRecolectada++;
+                    }
+                    else {
+                        arenaRecolectada++;
+                    }
+
+                    // Eliminar el material del mapa
+                    gotoxy(materiales[i].first, materiales[i].second);
+                    std::cout << " ";
+                    materiales.erase(materiales.begin() + i);
+                    break;
+                }
             }
 
+            // Verificar si se recolectaron todos los materiales
+            if (materiaPrimaRecolectada + arenaRecolectada == totalMateriales) {
+                break;
+            }
+
+            // Mover al jugador
+            if (_kbhit()) {
+                int tecla = _getch();
+                Jugador.mover(tecla, 1, mapa1);
+            }
+
+            // Mover enemigos y verificar colisiones
             for (auto* v : Enemigos) {
                 v->mover();
 
-                // 🔧 Colisión más precisa usando longitud
+                // Colisión con enemigos
                 if (Jugador.getY() == v->getY() &&
                     Jugador.getX() >= v->getX() &&
                     Jugador.getX() < v->getX() + v->getLongitud()) {
@@ -264,10 +324,11 @@ public:
             Sleep(50);
         }
 
-        system("cls"); // Limpia pantalla al morir
-        gotoxy(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2);
-        std::cout << "¡Game Over! Has muerto.\n";
-        Sleep(3000); // Espera antes de cerrar
+        if (!Jugador.estaViva()) {
+            system("cls"); // Limpia pantalla al morir
+            perdiste();
+            exit(0);
+        }
     }
 	~Juego() {
 		for (auto* v : Enemigos)
@@ -280,9 +341,9 @@ private:
 	Jugador Jugador;
     Mapas Mapas;
 	//       
-    int maderaRecolectada = 0;
-    int piedraRecolectada = 0;
-    int metalRecolectado = 0;
+    int madera = 0; // Contador de madera
+    int piedra = 0; // Contador de piedra
+    int metal = 0;  // Contador de metal
 	void intro();
 	void ocultarCursor();
     void creditos();
