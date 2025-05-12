@@ -117,6 +117,7 @@
     <ClInclude Include="fantasma.h" />
     <ClInclude Include="juego.h" />
     <ClInclude Include="jugador.h" />
+    <ClInclude Include="jugador2.h" />
     <ClInclude Include="mapas.h" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +127,7 @@
     <ClCompile Include="fantasma.cpp" />
     <ClCompile Include="juego.cpp" />
     <ClCompile Include="jugador.cpp" />
+    <ClCompile Include="jugador2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mapas.cpp" />
   </ItemGroup>
